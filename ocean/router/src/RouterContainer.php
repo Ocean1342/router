@@ -11,6 +11,7 @@ class RouterContainer
     public function __construct()
     {
         $this->routeMap = new RouteMap();
+        $this->matcher = new Matcher();
     }
 
     public function getMap()
@@ -20,5 +21,14 @@ class RouterContainer
         }
         return $this->routeMap;
     }
+
+    public function getMatcher()
+    {
+        if (!$this->matcher) {
+            return $this->matcher = new Matcher();
+        }
+        return $this->matcher;
+    }
+
 
 }

@@ -37,5 +37,5 @@ $routerContainer->getMap()->addRoute('user',
     ['var1' => 'val2'],
     'GET'
 );
-
-dump($routerContainer->getMap()->getRouteList());
+dump($routerContainer->getMatcher());
+$routerContainer->getMatcher()->match($request,$routerContainer->getMap());
