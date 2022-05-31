@@ -2,7 +2,9 @@
 
 namespace Ocean\Router;
 
-class RouteMap
+use Ocean\Router\Interfaces\RouteMapInterface;
+
+class RouteMap implements RouteMapInterface
 {
     protected array $routeList;
 

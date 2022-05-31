@@ -24,10 +24,18 @@ $f = function () {
 $routerContainer = new RouterContainer();
 dump($routerContainer);
 
-$map = $routerContainer->getMap();
-$map->addRoute('test',
-    '/test',
+$routerContainer->getMap()->addRoute('test',
+        '/test',
+        $f,
+        ['var1' => 'val1'],
+        'GET'
+    );
+
+$routerContainer->getMap()->addRoute('user',
+    '/user/{id}',
     $f,
-    ['var1' => 'val1'],
+    ['var1' => 'val2'],
     'GET'
 );
+
+dump($routerContainer->getMap()->getRouteList());
