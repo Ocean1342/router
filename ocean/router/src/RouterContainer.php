@@ -15,7 +15,6 @@ class RouterContainer
 
     public function getMap()
     {
-
         if (!$this->routeMap) {
             return $this->routeMap = new RouteMap();
         }

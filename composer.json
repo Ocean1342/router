@@ -11,6 +11,7 @@
     },
     "require-dev": {
         "symfony/error-handler": "^6.0",
-        "laminas/laminas-diactoros": "^2.11"
+        "laminas/laminas-diactoros": "^2.11",
+        "vimeo/psalm": "^4.23"
     }
 }
