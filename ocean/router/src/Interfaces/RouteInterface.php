@@ -7,12 +7,18 @@ interface RouteInterface
     /**
      * @return string
      */
+    public function getRegex(): string;
+
+
+    /**
+     * @return string
+     */
     public function getMethod(): string;
 
     /**
      * @return string
      */
-    public function getRawPath(): string;
+    public function getPath(): string;
 
     /**
      * @return array
@@ -22,7 +28,7 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getHandler(): string;
+    public function getHandler();
 
     /**
      * @return string

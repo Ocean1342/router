@@ -7,17 +7,40 @@ use Ocean\Router\Interfaces\RouteInterface;
 class Route implements RouteInterface
 {
     protected array $varsNames;
+    /**
+     * регулярное выражение для сопоставления с урлом
+     *
+     * @var non-empty-string
+     */
     protected string $regex;
 
+
+    /**
+     * @param string $name
+     * @param non-empty-string $path
+     * @param $handler
+     * @param array $parameters
+     * @param string $method
+     */
     public function __construct(
         protected string $name,
-        protected string $rawPath,
-        protected $handler,
+        protected string $path,
+        protected        $handler,
         protected array  $parameters = [],
         protected string $method = "GET"
 
     )
     {
+        $this->regex = RegexHelper::prepareRegex($this->path);
+    }
+
+    /**
+     *
+     * @return non-empty-string
+     */
+    public function getRegex(): string
+    {
+        return $this->regex;
     }
 
     /**
@@ -32,9 +55,9 @@ class Route implements RouteInterface
     /**
      * @return string
      */
-    public function getRawPath(): string
+    public function getPath(): string
     {
-        return $this->rawPath;
+        return $this->path;
     }
 
     /**
@@ -46,9 +69,9 @@ class Route implements RouteInterface
     }
 
     /**
-     * @return string
+     *
      */
-    public function getHandler(): string
+    public function getHandler(): callable
     {
         return $this->handler;
     }

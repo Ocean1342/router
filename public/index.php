@@ -22,7 +22,7 @@ $f = function () {
 };
 
 $routerContainer = new RouterContainer();
-dump($routerContainer);
+
 
 $routerContainer->getMap()->addRoute('test',
         '/test',
@@ -37,5 +37,15 @@ $routerContainer->getMap()->addRoute('user',
     ['var1' => 'val2'],
     'GET'
 );
-dump($routerContainer->getMatcher());
-$routerContainer->getMatcher()->match($request,$routerContainer->getMap());
+
+$matchedRoute = $routerContainer->getMatcher()->match($request,$routerContainer->getMap());
+
+//есть совпадение роута, нет роута
+if ($matchedRoute) {
+    dump('еСТЬ СОВПАДЕНИЕ');
+    dump($matchedRoute->getRegex());
+    dump($matchedRoute->getHandler());
+}
+
+
+//нужно вызвать каллбек совпавшего роута
