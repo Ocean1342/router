@@ -7,8 +7,7 @@ interface RouteInterface
     /**
      * @return string
      */
-    public function getRegex(): string;
-
+    public function getPathRegex(): string;
 
     /**
      * @return string
@@ -21,7 +20,7 @@ interface RouteInterface
     public function getPath(): string;
 
     /**
-     * @return array
+     * @return array переданные переменные пользователем
      */
     public function getParameters(): array;
 
@@ -36,7 +35,7 @@ interface RouteInterface
     public function getName(): string;
 
     /**
-     * @return array
+     * @return array переменные, полученные из роута /path/{$var1}/{$var2}
      */
-    public function getRouteVars(): array;
+//    public function getRouteVars(): array;
 }

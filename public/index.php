@@ -3,8 +3,10 @@ ini_set('display_errors', 1);
 
 require '../vendor/autoload.php';
 
+use Ocean\Router\RouteHelper;
 use Ocean\Router\RouterContainer;
 use Symfony\Component\ErrorHandler\Debug;
+
 
 Debug::enable();
 
@@ -17,33 +19,41 @@ $request = Laminas\Diactoros\ServerRequestFactory::fromGlobals(
 );
 
 
-$f = function () {
+$f = function ($param1,$id,$tail) {
+    dump($param1);
+    dump($id);
+    dump($tail);
     return 'hello route';
 };
 
 $routerContainer = new RouterContainer();
 
-
-$routerContainer->getMap()->addRoute('test',
+/*$routerContainer->getMap()->addRoute('test',
         '/test',
         $f,
         ['var1' => 'val1'],
         'GET'
-    );
+    );*/
 
 $routerContainer->getMap()->addRoute('user',
-    '/user/{id}',
+    '/test/{id}/{tail}',
     $f,
-    ['var1' => 'val2'],
+    ['param1' => 'val1'],
     'GET'
 );
 
-$matchedRoute = $routerContainer->getMatcher()->match($request,$routerContainer->getMap());
+try {
+    $matchedRoute = $routerContainer->getMatcher()->match($request,$routerContainer->getMap());
+    call_user_func_array($matchedRoute->getHandler(), $matchedRoute->getParameters());
+} catch (Exception $e) {
+    dump($e->getMessage());
+}
+
 
 //есть совпадение роута, нет роута
-if ($matchedRoute) {
-    dump('еСТЬ СОВПАДЕНИЕ');
-    dump($matchedRoute->getRegex());
+if (isset($matchedRoute)) {
+    dump('Route matched');
+    dump($matchedRoute->getPathRegex());
     dump($matchedRoute->getHandler());
 }
 

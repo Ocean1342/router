@@ -3,28 +3,32 @@
 namespace Ocean\Router;
 
 
+use Ocean\Router\Exceptions\BadMethodException;
+use Ocean\Router\Exceptions\RouteNotFoundException;
 use Ocean\Router\Interfaces\RouteInterface;
 use Ocean\Router\Interfaces\RouteMapInterface;
 use Psr\Http\Message\RequestInterface;
 
 class Matcher
 {
-    /** psalm? */
+    /** @psalm-var RouteInterface совпавший роут  */
     protected RouteInterface $matchedRoute;
 
     /**
-     * @psalm-var RequestInterface
-     * @psalm-var RouteMapInterface
+     * @param  RequestInterface $request
+     * @param  RouteMapInterface $map
      *
-     * @psalm-return RouteInterface|null
+     * @return RouteInterface
+     *
+     * @throws RouteNotFoundException|BadMethodException
      */
-    public function match(RequestInterface $request, RouteMapInterface $map): ?RouteInterface
+    public function match(RequestInterface $request, RouteMapInterface $map): RouteInterface
     {
-
+        $routeFound = false;
+        $methodEqual = false;
         foreach ($map->getRouteList() as $route) {
 
-            // matching route and request uri
-            if (preg_match($route->getRegex(), $request->getUri()->getPath(), $matchesInUri)) {
+            if (preg_match($route->getPathRegex(), $request->getUri()->getPath(), $matchesInUri)) {
                 $routeFound = true;
 
                 if ($request->getMethod() !== $route->getMethod()) {
@@ -32,21 +36,24 @@ class Matcher
                 }
                 $methodEqual = true;
 
-                // add route vars to Route object Пока не передаём переменные в роут
-
-/*                unset($matchesInUri[0]);
+                // add route vars to Route object
+                unset($matchesInUri[0]);
                 foreach ($matchesInUri as $k => $match) {
-                    $route->setVarsValue(--$k, $match);
-                }*/
+                    $route->routeHelper->setVarValues(--$k, $match);
+                }
                 $currentRoute = $route;
+                $currentRoute->mergeParametersAndRouteVars();
+
             }
         }
-        if($currentRoute) {
-            return $currentRoute;
-        } else {
-            return null;
+        if (!$routeFound) {
+            throw new RouteNotFoundException('Not found route');
+        }
+        if (!$methodEqual) {
+            throw new BadMethodException('Method in route not equal');
         }
 
+        return $currentRoute;
 
     }
 }

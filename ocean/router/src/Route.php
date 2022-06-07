@@ -6,20 +6,28 @@ use Ocean\Router\Interfaces\RouteInterface;
 
 class Route implements RouteInterface
 {
-    protected array $varsNames;
+    /**
+     * @var array
+     */
+    protected array $routeVars;
+
     /**
      * регулярное выражение для сопоставления с урлом
      *
      * @var non-empty-string
      */
-    protected string $regex;
-
+    protected string $pathRegex;
 
     /**
-     * @param string $name
-     * @param non-empty-string $path
-     * @param $handler
-     * @param array $parameters
+     * @var RouteHelper
+     */
+    public routeHelper $routeHelper;
+
+    /**
+     * @param string $name короткое имя роута
+     * @param non-empty-string $path зарегистрированный пользователем урл роута
+     * @param $handler обработчик роута
+     * @param array $parameters зарегистрированные переменные пользователем
      * @param string $method
      */
     public function __construct(
@@ -31,16 +39,28 @@ class Route implements RouteInterface
 
     )
     {
-        $this->regex = RegexHelper::prepareRegex($this->path);
+        $this->routeHelper = new RouteHelper();
+        $this->pathRegex = $this->routeHelper->createRegexPath($this->path);
+
+    }
+
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setVar(mixed $key,mixed $value): void
+    {
+        $this->routeVars[$key] = $value;
     }
 
     /**
      *
      * @return non-empty-string
      */
-    public function getRegex(): string
+    public function getPathRegex(): string
     {
-        return $this->regex;
+        return $this->pathRegex;
     }
 
     /**
@@ -85,11 +105,12 @@ class Route implements RouteInterface
     }
 
     /**
-     * @return array
+     * Объединяет переданные параметры и переменные взятые из роута
+     *
      */
-    public function getRouteVars(): array
+    public function mergeParametersAndRouteVars(): void
     {
-        return $this->varsNames;
+        $this->parameters = array_merge($this->getParameters(), $this->routeHelper->arVariables);
     }
 
 
