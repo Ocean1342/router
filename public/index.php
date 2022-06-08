@@ -3,7 +3,9 @@ ini_set('display_errors', 1);
 
 require '../vendor/autoload.php';
 
+use Ocean\Router\Matcher;
 use Ocean\Router\RouteHelper;
+use Ocean\Router\RouteMap;
 use Ocean\Router\RouterContainer;
 use Symfony\Component\ErrorHandler\Debug;
 
@@ -26,8 +28,8 @@ $f = function ($param1,$id,$tail) {
     return 'hello route';
 };
 
-$routerContainer = new RouterContainer();
-
+$map = new RouteMap();
+$matcher = new Matcher();
 /*$routerContainer->getMap()->addRoute('test',
         '/test',
         $f,
@@ -35,7 +37,7 @@ $routerContainer = new RouterContainer();
         'GET'
     );*/
 
-$routerContainer->getMap()->addRoute('user',
+$map->addRoute('user',
     '/test/{id}/{tail}',
     $f,
     ['param1' => 'val1'],
@@ -43,7 +45,7 @@ $routerContainer->getMap()->addRoute('user',
 );
 
 try {
-    $matchedRoute = $routerContainer->getMatcher()->match($request,$routerContainer->getMap());
+    $matchedRoute = $matcher->match($request,$map);
     call_user_func_array($matchedRoute->getHandler(), $matchedRoute->getParameters());
 } catch (Exception $e) {
     dump($e->getMessage());

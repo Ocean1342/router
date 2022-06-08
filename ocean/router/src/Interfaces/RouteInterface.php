@@ -5,16 +5,21 @@ namespace Ocean\Router\Interfaces;
 interface RouteInterface
 {
     /**
+     * Возвращает регулярное выражение роута
+     *
      * @return string
      */
     public function getPathRegex(): string;
 
     /**
+     * HTTP-method роута
      * @return string
      */
     public function getMethod(): string;
 
     /**
+     * Шаблон урла, зарегестрированный пользователем
+     *
      * @return string
      */
     public function getPath(): string;
@@ -30,12 +35,10 @@ interface RouteInterface
     public function getHandler();
 
     /**
+     * Возвращает имя роута
+     *
      * @return string
      */
     public function getName(): string;
 
-    /**
-     * @return array переменные, полученные из роута /path/{$var1}/{$var2}
-     */
-//    public function getRouteVars(): array;
 }
