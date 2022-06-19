@@ -4,7 +4,7 @@ namespace Ocean\Router\Interfaces;
 
 interface RouteMapInterface
 {
-    public function addRoute(string $name, string $rawPath, $handler, array $parameters, string $method): void;
+    public function addRoute(string $name, string $path, $handler, array $parameters, string $method): void;
 
     /**
      *

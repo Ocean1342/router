@@ -4,14 +4,28 @@ namespace Ocean\Router;
 
 use Ocean\Router\Interfaces\RouteMapInterface;
 
+/**
+ *
+ */
 class RouteMap implements RouteMapInterface
 {
+    /**
+     * @var array
+     */
     protected array $routeList;
 
+    /**
+     * @param string $name
+     * @param string $path
+     * @param $handler
+     * @param array $parameters
+     * @param string $method
+     * @return void
+     */
     public function addRoute(
         string $name,
-        string $rawPath,
-        $handler,
+        string $path,
+               $handler,
         array  $parameters,
         string $method
 
@@ -19,7 +33,7 @@ class RouteMap implements RouteMapInterface
     {
         $route = new Route(
             $name,
-            $rawPath,
+            $path,
             $handler,
             $parameters,
             $method
@@ -28,6 +42,9 @@ class RouteMap implements RouteMapInterface
     }
 
 
+    /**
+     * @return array|Interfaces\RouteInterface[]
+     */
     public function getRouteList(): array
     {
         return $this->routeList;

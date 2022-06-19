@@ -4,9 +4,7 @@ ini_set('display_errors', 1);
 require '../vendor/autoload.php';
 
 use Ocean\Router\Matcher;
-use Ocean\Router\RouteHelper;
 use Ocean\Router\RouteMap;
-use Ocean\Router\RouterContainer;
 use Symfony\Component\ErrorHandler\Debug;
 
 
@@ -21,7 +19,7 @@ $request = Laminas\Diactoros\ServerRequestFactory::fromGlobals(
 );
 
 
-$f = function ($param1,$id,$tail) {
+$f = function ($param1, $id, $tail) {
     dump($param1);
     dump($id);
     dump($tail);
@@ -40,12 +38,12 @@ $matcher = new Matcher();
 $map->addRoute('user',
     '/test/{id}/{tail}',
     $f,
-    ['param1' => 'val1'],
+    [],
     'GET'
 );
 
 try {
-    $matchedRoute = $matcher->match($request,$map);
+    $matchedRoute = $matcher->match($request, $map);
     call_user_func_array($matchedRoute->getHandler(), $matchedRoute->getParameters());
 } catch (Exception $e) {
     dump($e->getMessage());

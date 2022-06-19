@@ -12,9 +12,9 @@ class Route implements RouteInterface
     protected array $routeVars;
 
     /**
-     * регулярное выражение для сопоставления с урлом
+     * Regex to check with url
      *
-     * @var non-empty-string
+     * @psalm-var  non-empty-string
      */
     protected string $pathRegex;
 
@@ -24,11 +24,11 @@ class Route implements RouteInterface
     public routeHelper $routeHelper;
 
     /**
-     * @param string $name короткое имя роута
-     * @param non-empty-string $path зарегистрированный пользователем урл роута
-     * @param $handler обработчик роута
-     * @param array $parameters зарегистрированные переменные пользователем
-     * @param string $method
+     * @param string $name short route name
+     * @psalm-param non-empty-string $path user-registered route url
+     * @param $handler callable route handler
+     * @param array $parameters user-registered parameters
+     * @param string $method HTTP-method
      */
     public function __construct(
         protected string $name,
@@ -49,7 +49,7 @@ class Route implements RouteInterface
      * @param mixed $value
      * @return void
      */
-    public function setVar(mixed $key,mixed $value): void
+    public function setVar(mixed $key, mixed $value): void
     {
         $this->routeVars[$key] = $value;
     }
@@ -105,7 +105,7 @@ class Route implements RouteInterface
     }
 
     /**
-     * Объединяет переданные параметры и переменные взятые из роута
+     * Combines passed parameters and variables taken from the route
      *
      */
     public function mergeParametersAndRouteVars(): void

@@ -2,21 +2,19 @@
 
 namespace Ocean\Router;
 
-
-use phpDocumentor\Reflection\Types\Void_;
-
 /**
- * Класс должен подготавливать регулярные выражения для роута
- * Цель класса - уменьшение сложности работы с классом Роута, т.е. это коллекция методов для работы с регулярками
- * Все данные нужно брать из роута
+ * The class must prepare regex for the route
+ * Target class - reducing the complexity of working with Route,
+ * i.e. this is a collection of methods for working with regular expressions, route variables etc.
+ * All data must be collected from the route
  *
  * */
 class RouteHelper
 {
     /**
-     * регулярка для вычленения переменных из урла - {id}
+     * Regex for isolating variables from the url - {id}
      *
-     * @var non-empty-string $dynamicPartRegex
+     * @psalm-var  non-empty-string $dynamicPartRegex
      */
     public string $dynamicPartRegex = '([^\/]+)';
 
@@ -27,19 +25,19 @@ class RouteHelper
      */
     protected array $varNames = [];
 
-    public array $arVariables;
+    public array $arVariables = [];
 
     /**
-     * перегоняет урл в регулярное выражение
+     * transform path to regex
      *
-     * @param non-empty-string $path
-     * @return non-empty-string
+     * @psalm-param non-empty-string $path
+     * @psalm-return non-empty-string
      */
     public function createRegexPath(string $path): string
     {
         /**
          * @var array $varsNamesFromRawPathFromRoute
-         * имена переменных в $path роута вида /{id}
+         * vars names from route $path like /{id}
          */
         if (preg_match_all('/{' . $this->dynamicPartRegex . '}/i', $path, $varsNamesFromRawPathFromRoute)) {
             //Prepare regex
@@ -57,7 +55,7 @@ class RouteHelper
     }
 
     /**
-     * Метод Создаёт финальный вариант регулярного выражения для $path с переменными
+     * Final regex for $path with variables
      *
      * @param $varsNamesFromRawPathFromRoute
      * @param string $regex
@@ -66,7 +64,7 @@ class RouteHelper
     public function generateFinalDynamicRegex($varsNamesFromRawPathFromRoute, string $regex): string
     {
         foreach ($varsNamesFromRawPathFromRoute as $k => $varName) {
-            //тут заводим имена
+            //put names here
             $this->setVarName($varName);
             $regex .= $this->dynamicPartRegex;
             if ($k == (count($varsNamesFromRawPathFromRoute) - 1)) {
@@ -79,7 +77,7 @@ class RouteHelper
     }
 
     /**
-     * Сохраняет имена переменных из $rawPath
+     * Save variable names from $rawPath
      */
     public function setVarName(string $varName): void
     {
@@ -87,7 +85,7 @@ class RouteHelper
     }
 
     /**
-     * Возвращает массив с именами переменных из $path
+     * Returns an array with variable names from $path
      * @return array
      */
     public function getVarNames(): array
@@ -96,6 +94,8 @@ class RouteHelper
     }
 
     /**
+     * Set variables values
+     *
      * @psalm-var list<mixed> $value
      * @return void
      */

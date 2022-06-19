@@ -12,7 +12,8 @@
     "require-dev": {
         "symfony/error-handler": "^6.0",
         "laminas/laminas-diactoros": "^2.11",
-        "vimeo/psalm": "^4.23"
+        "vimeo/psalm": "^4.23",
+        "phpunit/phpunit": "^9.5"
     },
     "scripts": {
         "serve": "@php -S localhost:8000 -t public/"

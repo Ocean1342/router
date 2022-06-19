@@ -11,12 +11,12 @@ use Psr\Http\Message\RequestInterface;
 
 class Matcher
 {
-    /** @psalm-var RouteInterface совпавший роут  */
+    /** @psalm-var RouteInterface matched route */
     protected RouteInterface $matchedRoute;
 
     /**
-     * @param  RequestInterface $request
-     * @param  RouteMapInterface $map
+     * @param RequestInterface $request
+     * @param RouteMapInterface $map
      *
      * @return RouteInterface
      *
@@ -46,6 +46,7 @@ class Matcher
 
             }
         }
+
         if (!$routeFound) {
             throw new RouteNotFoundException('Not found route');
         }
