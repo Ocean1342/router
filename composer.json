@@ -16,6 +16,7 @@
         "phpunit/phpunit": "^9.5"
     },
     "scripts": {
-        "serve": "@php -S localhost:8000 -t public/"
+        "serve": "@php -S localhost:8000 -t public/",
+        "run-tests": "phpunit ocean/router/tests/"
     }
 }
