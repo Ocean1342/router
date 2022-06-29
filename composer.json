@@ -17,6 +17,8 @@
     },
     "scripts": {
         "serve": "@php -S localhost:8000 -t public/",
+        "psalm": "./vendor/bin/psalm",
+        "psalm-show-info": "./vendor/bin/psalm --show-info=true",
         "run-tests": "phpunit ocean/router/tests/"
     }
 }
