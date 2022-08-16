@@ -1,50 +1,61 @@
 <?php
-ini_set('display_errors', 1);
 
-require '../vendor/autoload.php';
+ini_set('display_errors', 0);
+error_reporting(E_WARNING);
 
+require __DIR__.'../../vendor/autoload.php';
+
+use Laminas\Diactoros\Request;
 use Ocean\Router\Matcher;
-use Ocean\Router\RouteMap;
+use Ocean\Router\HttpMethods;
+use Ocean\Router\RouteCollection;
 use Symfony\Component\ErrorHandler\Debug;
 
 
 Debug::enable();
 
-$request = Laminas\Diactoros\ServerRequestFactory::fromGlobals(
-    $_SERVER,
-    $_GET,
-    $_POST,
-    $_COOKIE,
-    $_FILES
-);
+$collection1 = new RouteCollection();
 
+
+$request = new Request('/fall/123/asd',);
 
 $f = function ($param1, $id, $tail) {
-    dump($param1);
-    dump($id);
-    dump($tail);
+    /*    dump($param1);
+        dump($id);
+        dump($tail);*/
     return 'hello route';
 };
 
-$map = new RouteMap();
+$routeCollection = new RouteCollection();
 $matcher = new Matcher();
-/*$routerContainer->getMap()->addRoute('test',
-        '/test',
-        $f,
-        ['var1' => 'val1'],
-        'GET'
-    );*/
 
-$map->addRoute('user',
-    '/test/{id}/{tail}',
-    $f,
+$routeCollection->addRoute(
+    'user',
+    '/test',
+    function () {
+        /*        dump($id);
+                dump($tail);*/
+        return 'hello route';
+    },
     [],
-    'GET'
+    HttpMethods::GET
+);
+
+$routeCollection->addRoute(
+    'test'.rand(10, 99),
+    '/fall/{id}/{tail}',
+    function ($id, $tail) {
+        dump($id);
+        dump($tail);
+        return 'hello route';
+    },
+    [],
+    HttpMethods::GET
 );
 
 try {
-    $matchedRoute = $matcher->match($request, $map);
-    call_user_func_array($matchedRoute->getHandler(), $matchedRoute->getParameters());
+    $matchedRoute = $matcher->match($request, $routeCollection);
+//    call_user_func_array($matchedRoute->getHandler(), $matchedRoute->getParameters());
 } catch (Exception $e) {
     dump($e->getMessage());
 }
@@ -53,8 +64,8 @@ try {
 //есть совпадение роута, нет роута
 if (isset($matchedRoute)) {
     dump('Route matched');
-    dump($matchedRoute->getPathRegex());
-    dump($matchedRoute->getHandler());
+    //dump($matchedRoute->getPathRegex());
+    //dump($matchedRoute->getHandler());
 }
 
 

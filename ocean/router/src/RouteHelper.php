@@ -99,7 +99,7 @@ class RouteHelper
      * @psalm-var list<mixed> $value
      * @return void
      */
-    public function setVarValues(int $index, mixed $value): void
+    public function setVarValues(mixed $index, mixed $value): void
     {
         $this->arVariables[$this->varNames[$index]] = $value;
     }

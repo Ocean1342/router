@@ -1,11 +1,15 @@
 <?php
 
+namespace Ocean\Tests;
+
 use Laminas\Diactoros\Request;
 use Ocean\Router\Exceptions\BadMethodException;
 use Ocean\Router\Exceptions\RouteNotFoundException;
+use Ocean\Router\HttpMethods;
+use Ocean\Router\Interfaces\MatchedRouteInterface;
 use Ocean\Router\Interfaces\RouteInterface;
 use Ocean\Router\Matcher;
-use Ocean\Router\RouteMap;
+use Ocean\Router\RouteCollection;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
@@ -20,8 +24,8 @@ class MatcherTest extends TestCase
     public function routeProvider()
     {
         return [
-            ['/test', 'POST', 'simple-route', '/test'],
-            ['/test/ivan/99', 'POST', 'dynamic-route', '/test/{user}/{id}'],
+            ['/test', HttpMethods::POST, 'simple-route', '/test'],
+            ['/test/ivan/99', HttpMethods::POST, 'dynamic-route', '/test/{user}/{id}'],
         ];
     }
 
@@ -30,9 +34,9 @@ class MatcherTest extends TestCase
      */
     public function testMatchRoute($uri, $method, $name, $path)
     {
-        $request = new Request($uri, $method);
-        $currentRoute = $this->prepareMatchedRoute($request, $uri, $method, $name, $path);
-        $this->assertSame($currentRoute->getName(), $name);
+        $request = new Request($uri, $method->name);
+        $matchedRoute = $this->prepareMatchedRoute($request, $uri, $method, $name, $path);
+        $this->assertSame($matchedRoute->getRoute()->getName(), $name);
     }
 
     /**
@@ -41,9 +45,8 @@ class MatcherTest extends TestCase
     public function testRouteNotFoundException($uri, $method, $name, $path)
     {
         $this->expectException('Ocean\Router\Exceptions\RouteNotFoundException');
-        $request = new Request($uri, $method);
+        $request = new Request($uri, $method->name);
         $this->prepareMatchedRoute($request, '/failed-route', $method, $name, '/');
-
     }
 
     /**
@@ -52,9 +55,8 @@ class MatcherTest extends TestCase
     public function testRouteNotBadMethodException($uri, $method, $name, $path)
     {
         $this->expectException('Ocean\Router\Exceptions\BadMethodException');
-        $request = new Request($uri, $method);
-        $this->prepareMatchedRoute($request, $uri, "GET", $name, $path);
-
+        $request = new Request($uri, $method->name);
+        $this->prepareMatchedRoute($request, $uri, HttpMethods::GET, $name, $path);
     }
 
     /**
@@ -67,9 +69,9 @@ class MatcherTest extends TestCase
      * @throws BadMethodException
      * @throws RouteNotFoundException
      */
-    public function prepareMatchedRoute($request, $uri, $method, $name, $path): RouteInterface
+    public function prepareMatchedRoute($request, $uri, $method, $name, $path): MatchedRouteInterface
     {
-        $map = new RouteMap();
+        $map = new RouteCollection();
         $map->addRoute($name, $path, function () {
             //stub
         }, [], $method);
@@ -77,4 +79,5 @@ class MatcherTest extends TestCase
 
         return $matcher->match($request, $map);
     }
+
 }

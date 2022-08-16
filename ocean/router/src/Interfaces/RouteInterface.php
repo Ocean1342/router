@@ -4,18 +4,12 @@ namespace Ocean\Router\Interfaces;
 
 interface RouteInterface
 {
-    /**
-     * Route regex
-     *
-     * @return string
-     */
-    public function getPathRegex(): string;
 
     /**
      * HTTP-method
-     * @return string
+     * @return MethodsInterface
      */
-    public function getMethod(): string;
+    public function getMethod(): MethodsInterface;
 
     /**
      * User-registered path
@@ -30,15 +24,9 @@ interface RouteInterface
     public function getParameters(): array;
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getHandler();
+    public function getHandler(): mixed;
 
-    /**
-     * Route name
-     *
-     * @return string
-     */
-    public function getName(): string;
 
 }

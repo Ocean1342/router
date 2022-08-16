@@ -5,9 +5,11 @@ namespace Ocean\Router;
 
 use Ocean\Router\Exceptions\BadMethodException;
 use Ocean\Router\Exceptions\RouteNotFoundException;
+use Ocean\Router\Interfaces\MatchedRouteInterface;
 use Ocean\Router\Interfaces\RouteInterface;
-use Ocean\Router\Interfaces\RouteMapInterface;
+use Ocean\Router\Interfaces\RouteCollectionInterface;
 use Psr\Http\Message\RequestInterface;
+
 
 class Matcher
 {
@@ -15,35 +17,30 @@ class Matcher
     protected RouteInterface $matchedRoute;
 
     /**
-     * @param RequestInterface $request
-     * @param RouteMapInterface $map
+     * @param  RequestInterface  $request
+     * @param  RouteCollectionInterface  $collection
      *
-     * @return RouteInterface
+     * @return MatchedRouteInterface
      *
      * @throws RouteNotFoundException|BadMethodException
      */
-    public function match(RequestInterface $request, RouteMapInterface $map): RouteInterface
+    public function match(RequestInterface $request, RouteCollectionInterface $collection): MatchedRouteInterface
     {
         $routeFound = false;
         $methodEqual = false;
-        foreach ($map->getRouteList() as $route) {
 
-            if (preg_match($route->getPathRegex(), $request->getUri()->getPath(), $matchesInUri)) {
+        foreach ($collection->getRouteList() as $route) {
+//            dump($route);
+            $currentRoutePath = preg_replace('/\{(\w+)}/ium', '(?<$1>[^/]+)', $route->getPath());
+            if (preg_match('#^'.$currentRoutePath.'$#isum', $request->getUri()->getPath(), $matches)) {
                 $routeFound = true;
 
-                if ($request->getMethod() !== $route->getMethod()) {
+                if ($request->getMethod() !== $route->getMethod()->name) {
                     continue;
                 }
                 $methodEqual = true;
-
-                // add route vars to Route object
-                unset($matchesInUri[0]);
-                foreach ($matchesInUri as $k => $match) {
-                    $route->routeHelper->setVarValues(--$k, $match);
-                }
                 $currentRoute = $route;
-                $currentRoute->mergeParametersAndRouteVars();
-
+                $route->mergeParametersAndRouteVars($matches);
             }
         }
 
@@ -54,7 +51,6 @@ class Matcher
             throw new BadMethodException('Method in route not equal');
         }
 
-        return $currentRoute;
-
+        return new MatchedRoute($currentRoute, $request);
     }
 }

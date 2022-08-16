@@ -2,103 +2,48 @@
 
 namespace Ocean\Router;
 
+use Ocean\Router\Interfaces\MethodsInterface;
 use Ocean\Router\Interfaces\RouteInterface;
 
 class Route implements RouteInterface
 {
-    /**
-     * @var array
-     */
     protected array $routeVars;
 
     /**
-     * Regex to check with url
-     *
-     * @psalm-var  non-empty-string
-     */
-    protected string $pathRegex;
-
-    /**
-     * @var RouteHelper
-     */
-    public routeHelper $routeHelper;
-
-    /**
-     * @param string $name short route name
      * @psalm-param non-empty-string $path user-registered route url
-     * @param $handler callable route handler
-     * @param array $parameters user-registered parameters
-     * @param string $method HTTP-method
+     * @psalm-param non-empty-string $name user-registered route url
+     * @psalm-param callable|class-string<callable> $handler
      */
     public function __construct(
         protected string $name,
         protected string $path,
-        protected        $handler,
-        protected array  $parameters = [],
-        protected string $method = "GET"
+        protected $handler,
+        protected array $parameters = [],
+        protected MethodsInterface $method = HttpMethods::GET
 
-    )
-    {
-        $this->routeHelper = new RouteHelper();
-        $this->pathRegex = $this->routeHelper->createRegexPath($this->path);
-
+    ) {
     }
 
-    /**
-     * @param mixed $key
-     * @param mixed $value
-     * @return void
-     */
-    public function setVar(mixed $key, mixed $value): void
-    {
-        $this->routeVars[$key] = $value;
-    }
-
-    /**
-     *
-     * @return non-empty-string
-     */
-    public function getPathRegex(): string
-    {
-        return $this->pathRegex;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod(): string
+    public function getMethod(): MethodsInterface
     {
         return $this->method;
     }
 
-
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return array
-     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     *
-     */
     public function getHandler(): callable
     {
         return $this->handler;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -107,10 +52,24 @@ class Route implements RouteInterface
     /**
      * Combines passed parameters and variables taken from the route
      *
+     * @psalm-param array{varName: string, varValue: mixed}|array{} $ar
+     * @return void
      */
-    public function mergeParametersAndRouteVars(): void
+    public function mergeParametersAndRouteVars(array $ar = []): void
     {
-        $this->parameters = array_merge($this->getParameters(), $this->routeHelper->arVariables);
+        if (!empty($ar)) {
+            foreach ($ar as $k => $v) {
+                if (is_numeric($k)) {
+                    unset($ar[$k]);
+                }
+            }
+        } else {
+            return;
+        }
+        $this->parameters = array_merge(
+            $this->getParameters(),
+            $ar
+        );
     }
 
 
