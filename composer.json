@@ -1,12 +1,12 @@
 {
   "autoload": {
     "psr-4": {
-      "Ocean\\Router\\": "src/"
+      "Ocean\\Router\\": "ocean/router/src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Ocean\\Router\\Tests\\": "tests/"
+      "Ocean\\Router\\Tests\\": "ocean/router/tests/"
     }
   },
   "require": {
