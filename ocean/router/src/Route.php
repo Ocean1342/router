@@ -24,6 +24,9 @@ class Route implements RouteInterface
     ) {
     }
 
+    /**
+     * @return MethodsInterface of Enum
+     */
     public function getMethod(): MethodsInterface
     {
         return $this->method;
@@ -50,9 +53,10 @@ class Route implements RouteInterface
     }
 
     /**
+     *
      * Combines passed parameters and variables taken from the route
      *
-     * @psalm-param array{varName: string, varValue: mixed}|array{} $ar
+     * @psalm-param array{varName: string, varValue: mixed}|array{empty,empty} $ar
      * @return void
      */
     public function mergeParametersAndRouteVars(array $ar = []): void

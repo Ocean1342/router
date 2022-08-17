@@ -4,6 +4,10 @@ namespace Ocean\Router;
 
 use Ocean\Router\Interfaces\MethodsInterface;
 
+/**
+ * @template Enum
+ * @psalm-return object of Enum
+ */
 enum HttpMethods implements MethodsInterface
 {
     case GET;

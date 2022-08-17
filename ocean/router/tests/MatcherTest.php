@@ -1,6 +1,6 @@
 <?php
 
-namespace Ocean\Tests;
+namespace Ocean\Router\Tests;
 
 use Laminas\Diactoros\Request;
 use Ocean\Router\Exceptions\BadMethodException;

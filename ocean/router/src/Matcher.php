@@ -6,21 +6,18 @@ namespace Ocean\Router;
 use Ocean\Router\Exceptions\BadMethodException;
 use Ocean\Router\Exceptions\RouteNotFoundException;
 use Ocean\Router\Interfaces\MatchedRouteInterface;
-use Ocean\Router\Interfaces\RouteInterface;
 use Ocean\Router\Interfaces\RouteCollectionInterface;
 use Psr\Http\Message\RequestInterface;
 
 
 class Matcher
 {
-    /** @psalm-var RouteInterface matched route */
-    protected RouteInterface $matchedRoute;
 
     /**
      * @param  RequestInterface  $request
      * @param  RouteCollectionInterface  $collection
      *
-     * @return MatchedRouteInterface
+     * @return MatchedRoute
      *
      * @throws RouteNotFoundException|BadMethodException
      */
@@ -30,7 +27,6 @@ class Matcher
         $methodEqual = false;
 
         foreach ($collection->getRouteList() as $route) {
-//            dump($route);
             $currentRoutePath = preg_replace('/\{(\w+)}/ium', '(?<$1>[^/]+)', $route->getPath());
             if (preg_match('#^'.$currentRoutePath.'$#isum', $request->getUri()->getPath(), $matches)) {
                 $routeFound = true;

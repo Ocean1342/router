@@ -10,7 +10,4 @@ interface MatchedRouteInterface
 
     public function getRequest(): RequestInterface;
 
-    public function getParams(): iterable;
-
-    public function getMethod(): string;
 }

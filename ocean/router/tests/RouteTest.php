@@ -1,6 +1,6 @@
 <?php
 
-namespace Ocean\Tests;
+namespace Ocean\Router\Tests;
 
 use Ocean\Router\Route;
 use PHPUnit\Framework\TestCase;

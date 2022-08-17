@@ -8,6 +8,7 @@ use Generator;
 use IteratorAggregate;
 use Ocean\Router\Interfaces\MethodsInterface;
 use Ocean\Router\Interfaces\RouteCollectionInterface;
+use Ocean\Router\Interfaces\RouteInterface;
 use Traversable;
 
 /**
@@ -17,7 +18,7 @@ use Traversable;
 class RouteCollection implements RouteCollectionInterface, IteratorAggregate
 {
     /**
-     * @var array
+     * @var array<Route>
      */
     protected array $routeList = [];
 
@@ -46,9 +47,53 @@ class RouteCollection implements RouteCollectionInterface, IteratorAggregate
         );
         $this->routeList[] = $route;
     }
-    
+
+    public function get(string $path, $handler, $parameters = [], $name = ''): void
+    {
+        $this->addRoute(
+            $name,
+            $path,
+            $handler,
+            $parameters,
+            HttpMethods::GET
+        );
+    }
+
+    public function post(string $path, $handler, $parameters = [], $name = ''): void
+    {
+        $this->addRoute(
+            $name,
+            $path,
+            $handler,
+            $parameters,
+            HttpMethods::POST
+        );
+    }
+
+    public function put(string $path, $handler, $parameters = [], $name = ''): void
+    {
+        $this->addRoute(
+            $name,
+            $path,
+            $handler,
+            $parameters,
+            HttpMethods::PUT
+        );
+    }
+
+    public function delete(string $path, $handler, $parameters = [], $name = ''): void
+    {
+        $this->addRoute(
+            $name,
+            $path,
+            $handler,
+            $parameters,
+            HttpMethods::DELETE
+        );
+    }
+
     /**
-     * @return Generator<int, mixed, mixed, void>
+     * @return Generator<Route>
      */
     public function getRouteList(): iterable
     {

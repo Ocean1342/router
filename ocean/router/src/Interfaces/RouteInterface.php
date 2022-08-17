@@ -2,12 +2,13 @@
 
 namespace Ocean\Router\Interfaces;
 
+
 interface RouteInterface
 {
 
     /**
      * HTTP-method
-     * @return MethodsInterface
+     * @psalm-return object of MethodsInterface<Enum>
      */
     public function getMethod(): MethodsInterface;
 
